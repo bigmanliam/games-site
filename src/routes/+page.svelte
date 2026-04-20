@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-  <title>daily-le.us — Daily Puzzle Games</title>
+  <title>daily-le.com — Daily Puzzle Games</title>
 </svelte:head>
 
 <main class="min-h-screen py-10 px-4">
@@ -44,7 +44,7 @@
     <!-- Header -->
     <header class="text-center mb-10">
       <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">
-        daily<span class="text-indigo-400">-le</span>.us
+        daily<span class="text-indigo-400">-le</span>.com
       </h1>
       <p class="text-slate-400 text-sm">Nine daily puzzles. One obsession.</p>
       <div class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-slate-300">
