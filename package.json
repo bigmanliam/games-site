@@ -2,7 +2,7 @@
   "name": "daily-le",
   "version": "0.0.1",
   "private": true,
-  'type": "module",
+  "type": "module",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
