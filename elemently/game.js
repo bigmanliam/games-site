@@ -1,29 +1,8 @@
 const MAX_GUESSES = 6;
 const DAILY_DONE_KEY = "elemently_daily_done_v1";
 
-function $(id) { return document.getElementById(id); }
-function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
-
-function todayLocalISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function hashStringToUint32(str) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
-  return h >>> 0;
-}
-
-function pickDeterministic(arr, seedStr) {
-  return arr[hashStringToUint32(seedStr) % arr.length];
-}
-
-function gameNumberFromDate(dateISO) {
-  const base = new Date("2026-01-01T00:00:00");
-  const cur = new Date(dateISO + "T00:00:00");
-  return Math.max(1, Math.round((cur - base) / 86400000) + 1);
-}
+/* Utilities: $, setText, todayLocalISO, gameNumberFromDate, hashStringToUint32,
+   pickFromBag, showModal, hideModal, shareNice from ../shared.js */
 
 /* ---- All 118 Elements ---- */
 const ELEMENTS = [
@@ -147,18 +126,6 @@ const ELEMENTS = [
   {name:"Oganesson",symbol:"Og",number:118},
 ];
 
-/* ---- Modal ---- */
-function showModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = false; if (md) md.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function hideModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = true; if (md) md.hidden = true;
-  document.body.style.overflow = "";
-}
-
 /* ---- Share ---- */
 function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
   const emojis = history.map(h => {
@@ -169,13 +136,6 @@ function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
   return `Elemently #${puzzleNo} ⚛️\n${emojis}\n${score}\nhttps://daily-le.com/elemently/`;
 }
 
-async function shareNice(text) {
-  if (navigator.share) {
-    try { await navigator.share({ title: "Elemently", text, url: "https://daily-le.com/elemently/" }); return; } catch {}
-  }
-  try { await navigator.clipboard.writeText(text); } catch { prompt("Copy:", text); }
-}
-
 /* ---- Main ---- */
 (function main() {
   const today = todayLocalISO();
@@ -183,7 +143,7 @@ async function shareNice(text) {
   setText("dayPill", `#${gameNum} — ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
-  const chosen = pickDeterministic(ELEMENTS, "elemently|" + today);
+  const chosen = pickFromBag(ELEMENTS, "elemently", today);
   setText("elementName", chosen.name);
   setText("elementSymbol", chosen.symbol);
 
@@ -290,8 +250,8 @@ async function shareNice(text) {
   function currentShareText() {
     return buildShareText(gameNum, history, solved, guesses, chosen.number);
   }
-  $("shareBtn")?.addEventListener("click", () => shareNice(currentShareText()));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice(currentShareText()));
+  $("shareBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
 
   $("closeStatsBtn")?.addEventListener("click", hideModal);
   $("statsBackdrop")?.addEventListener("click", hideModal);

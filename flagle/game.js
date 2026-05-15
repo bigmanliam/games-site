@@ -9,32 +9,9 @@ const WD_CACHE_AT_KEY = "flagle_wd_countries_at_v1";
 const DAILY_DONE_KEY = "flagle_daily_done_v1";
 const FLAG_CDN = "https://flagcdn.com/w640";
 
-function $(id) { return document.getElementById(id); }
-function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
-
-function todayLocalISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function hashStringToUint32(str) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return h >>> 0;
-}
-
-function pickDeterministic(arr, seedStr) {
-  return arr[hashStringToUint32(seedStr) % arr.length];
-}
-
-function gameNumberFromDate(dateISO) {
-  const base = new Date("2026-01-01T00:00:00");
-  const cur = new Date(dateISO + "T00:00:00");
-  return Math.max(1, Math.round((cur - base) / 86400000) + 1);
-}
+/* Utilities provided by ../shared.js:
+   $, setText, todayLocalISO, hashStringToUint32, gameNumberFromDate,
+   pickFromBag, showModal, hideModal, shareNice */
 
 async function fetchJSON(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -90,22 +67,25 @@ function buildFlagGrid(iso2) {
     tile.className = "flag-tile";
     tile.dataset.index = i;
 
-    // Each tile shows a portion of the flag via object-position
-    const col = i % 3;
-    const row = Math.floor(i / 3);
-    const img = document.createElement("img");
-    img.className = "tile-img";
-    img.src = imgSrc;
-    img.alt = "";
-    img.draggable = false;
-    // Use object-position to show the right section
-    img.style.objectPosition = `${col * 50}% ${row * 100}%`;
+    // 3 columns, 2 rows — each tile shows 1/3 width, 1/2 height of the flag
+    const col = i % 3;  // 0, 1, 2
+    const row = Math.floor(i / 3);  // 0, 1
+
+    // Use a div with background-image to clip the correct section
+    const flagDiv = document.createElement("div");
+    flagDiv.className = "tile-img";
+    flagDiv.style.backgroundImage = `url(${imgSrc})`;
+    // Size the background to 300% wide, 200% tall so each tile shows 1/6
+    flagDiv.style.backgroundSize = "300% 200%";
+    // Position: col 0 = 0%, col 1 = 50%, col 2 = 100%; row 0 = 0%, row 1 = 100%
+    flagDiv.style.backgroundPosition = `${col * 50}% ${row * 100}%`;
+    flagDiv.style.backgroundRepeat = "no-repeat";
 
     const cover = document.createElement("div");
     cover.className = "tile-cover";
     cover.textContent = "?";
 
-    tile.appendChild(img);
+    tile.appendChild(flagDiv);
     tile.appendChild(cover);
     grid.appendChild(tile);
   }
@@ -195,24 +175,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   return `Flagle #${puzzleNo} 🏁\n${emojis}\n${score}\nhttps://daily-le.com/flagle/`;
 }
 
-async function shareNice(text) {
-  if (navigator.share) {
-    try { await navigator.share({ title: "Flagle", text, url: "https://daily-le.com/flagle/" }); return; } catch {}
-  }
-  try { await navigator.clipboard.writeText(text); } catch { prompt("Copy your share text:", text); }
-}
-
-/* ---- Modal ---- */
-function showModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = false; if (md) md.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function hideModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = true; if (md) md.hidden = true;
-  document.body.style.overflow = "";
-}
+/* shareNice, showModal, hideModal provided by ../shared.js */
 
 /* ---- Main ---- */
 (async function main() {
@@ -229,7 +192,7 @@ function hideModal() {
   }
 
   const today = todayLocalISO();
-  const chosen = pickDeterministic(countries, "flagle|" + today);
+  const chosen = pickFromBag(countries, "flagle", today);
   buildFlagGrid(chosen.iso2);
 
   // Reveal first tile
@@ -334,8 +297,8 @@ function hideModal() {
     const no = gameNumberFromDate(today);
     return buildShareText(no, history, solved, guesses);
   }
-  $("shareBtn")?.addEventListener("click", () => shareNice(currentShareText()));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice(currentShareText()));
+  $("shareBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
 
   // Modal close
   $("closeStatsBtn")?.addEventListener("click", hideModal);

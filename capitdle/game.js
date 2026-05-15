@@ -5,29 +5,9 @@ const WD_ENDPOINT = "https://query.wikidata.org/sparql";
 const WD_CACHE_KEY = "capitdle_wd_data_v1";
 const WD_CACHE_AT_KEY = "capitdle_wd_data_at_v1";
 
-function $(id) { return document.getElementById(id); }
-function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
-
-function todayLocalISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function hashStringToUint32(str) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
-  return h >>> 0;
-}
-
-function pickDeterministic(arr, seedStr) {
-  return arr[hashStringToUint32(seedStr) % arr.length];
-}
-
-function gameNumberFromDate(dateISO) {
-  const base = new Date("2026-01-01T00:00:00");
-  const cur = new Date(dateISO + "T00:00:00");
-  return Math.max(1, Math.round((cur - base) / 86400000) + 1);
-}
+/* Utilities provided by ../shared.js:
+   $, setText, todayLocalISO, hashStringToUint32, gameNumberFromDate,
+   pickFromBag, showModal, hideModal, shareNice */
 
 async function fetchJSON(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -149,30 +129,12 @@ function setupSearch(allCapitals) {
   };
 }
 
-/* ---- Modal ---- */
-function showModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = false; if (md) md.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function hideModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = true; if (md) md.hidden = true;
-  document.body.style.overflow = "";
-}
+/* showModal, hideModal, shareNice provided by ../shared.js */
 
-/* ---- Share ---- */
 function buildShareText(puzzleNo, history, solved, guessesUsed) {
   const emojis = history.map(h => h.correct ? "🟩" : "🟥").join("");
   const score = solved ? `${guessesUsed}/${MAX_GUESSES}` : `X/${MAX_GUESSES}`;
   return `Capitdle #${puzzleNo} 🏛️\n${emojis}\n${score}\nhttps://daily-le.com/capitdle/`;
-}
-
-async function shareNice(text) {
-  if (navigator.share) {
-    try { await navigator.share({ title: "Capitdle", text, url: "https://daily-le.com/capitdle/" }); return; } catch {}
-  }
-  try { await navigator.clipboard.writeText(text); } catch { prompt("Copy:", text); }
 }
 
 /* ---- Main ---- */
@@ -190,7 +152,7 @@ async function shareNice(text) {
     return;
   }
 
-  const chosen = pickDeterministic(data, "capitdle|" + today);
+  const chosen = pickFromBag(data, "capitdle", today);
   setText("countryName", chosen.country);
 
   // Build list of all unique capital names for dropdown
@@ -283,8 +245,8 @@ async function shareNice(text) {
   function currentShareText() {
     return buildShareText(gameNumberFromDate(today), history, solved, guesses);
   }
-  $("shareBtn")?.addEventListener("click", () => shareNice(currentShareText()));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice(currentShareText()));
+  $("shareBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
 
   $("closeStatsBtn")?.addEventListener("click", hideModal);
   $("statsBackdrop")?.addEventListener("click", hideModal);

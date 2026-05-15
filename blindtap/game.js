@@ -1,42 +1,10 @@
 const TARGET = 5.000;
 const DAILY_DONE_KEY = "blindtap_daily_done_v1";
 
-function $(id) { return document.getElementById(id); }
-function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
+/* Utilities: $, setText, todayLocalISO, gameNumberFromDate, showModal, hideModal, shareNice from ../shared.js */
 
-function todayLocalISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function gameNumberFromDate(dateISO) {
-  const base = new Date("2026-01-01T00:00:00");
-  const cur = new Date(dateISO + "T00:00:00");
-  return Math.max(1, Math.round((cur - base) / 86400000) + 1);
-}
-
-/* ---- Modal ---- */
-function showModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = false; if (md) md.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function hideModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = true; if (md) md.hidden = true;
-  document.body.style.overflow = "";
-}
-
-/* ---- Share ---- */
 function buildShareText(puzzleNo, finalTime, diffMs) {
   return `Blindtap #${puzzleNo} 🙈\n${finalTime.toFixed(3)}s (off by ${diffMs}ms)\nhttps://daily-le.com/blindtap/`;
-}
-
-async function shareNice(text) {
-  if (navigator.share) {
-    try { await navigator.share({ title: "Blindtap", text, url: "https://daily-le.com/blindtap/" }); return; } catch {}
-  }
-  try { await navigator.clipboard.writeText(text); } catch { prompt("Copy your share text:", text); }
 }
 
 /* ---- Main ---- */
@@ -93,8 +61,8 @@ async function shareNice(text) {
     showModal();
 
     const shareText = buildShareText(puzzleNo, finalTime, diffMs);
-    $("shareBtn").onclick = () => shareNice(shareText);
-    $("shareTopBtn").onclick = () => shareNice(shareText);
+    $("shareBtn").onclick = () => shareNice("Blindtap", shareText, "https://daily-le.com/blindtap/");
+    $("shareTopBtn").onclick = () => shareNice("Blindtap", shareText, "https://daily-le.com/blindtap/");
   }
 
   // Already played?
@@ -114,8 +82,8 @@ async function shareNice(text) {
       showModal();
 
       const shareText = buildShareText(puzzleNo, saved.time, saved.diffMs);
-      $("shareBtn").onclick = () => shareNice(shareText);
-      $("shareTopBtn").onclick = () => shareNice(shareText);
+      $("shareBtn").onclick = () => shareNice("Blindtap", shareText, "https://daily-le.com/blindtap/");
+      $("shareTopBtn").onclick = () => shareNice("Blindtap", shareText, "https://daily-le.com/blindtap/");
       return;
     }
   } catch {}

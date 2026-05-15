@@ -3,25 +3,8 @@ const WIN_PCT = 0.10; // within 10%
 
 const DAILY_DONE_KEY = "distantle_daily_done_v1";
 
-function $(id) { return document.getElementById(id); }
-function setText(id, txt) { const el = $(id); if (el) el.textContent = txt; }
-
-function todayLocalISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function hashStringToUint32(str) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
-  return h >>> 0;
-}
-
-function gameNumberFromDate(dateISO) {
-  const base = new Date("2026-01-01T00:00:00");
-  const cur = new Date(dateISO + "T00:00:00");
-  return Math.max(1, Math.round((cur - base) / 86400000) + 1);
-}
+/* Utilities: $, setText, todayLocalISO, gameNumberFromDate, hashStringToUint32,
+   pickFromBag, showModal, hideModal, shareNice from ../shared.js */
 
 // Haversine distance in km
 function haversineKm(lat1, lon1, lat2, lon2) {
@@ -133,11 +116,6 @@ function generatePairs() {
 
 const ALL_PAIRS = generatePairs();
 
-function pickDailyPair(dateISO) {
-  const h = hashStringToUint32("distantle|" + dateISO);
-  return ALL_PAIRS[h % ALL_PAIRS.length];
-}
-
 function formatKm(n) {
   return n.toLocaleString(undefined) + " km";
 }
@@ -164,30 +142,11 @@ function parseGuessKm(raw) {
   return val;
 }
 
-/* ---- Modal ---- */
-function showModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = false; if (md) md.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function hideModal() {
-  const bd = $("statsBackdrop"); const md = $("statsModal");
-  if (bd) bd.hidden = true; if (md) md.hidden = true;
-  document.body.style.overflow = "";
-}
-
 /* ---- Share ---- */
 function buildShareText(puzzleNo, history, solved, guessesUsed) {
   const row = history.map(h => `${h.band.emoji}${h.arrow}`).join(" ");
   const score = solved ? `${guessesUsed}/${MAX_GUESSES}` : `X/${MAX_GUESSES}`;
   return `Distantle #${puzzleNo} 📏\n${row}\n${score}\nhttps://daily-le.com/distantle/`;
-}
-
-async function shareNice(text) {
-  if (navigator.share) {
-    try { await navigator.share({ title: "Distantle", text, url: "https://daily-le.com/distantle/" }); return; } catch {}
-  }
-  try { await navigator.clipboard.writeText(text); } catch { prompt("Copy:", text); }
 }
 
 /* ---- Main ---- */
@@ -196,7 +155,7 @@ async function shareNice(text) {
   setText("dayPill", `Daily: ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
-  const pair = pickDailyPair(today);
+  const pair = pickFromBag(ALL_PAIRS, "distantle", today);
   setText("city1", pair.a.name);
   setText("country1", pair.a.country);
   setText("city2", pair.b.name);
@@ -317,8 +276,8 @@ async function shareNice(text) {
   function currentShareText() {
     return buildShareText(gameNumberFromDate(today), history, solved, guesses);
   }
-  $("shareBtn")?.addEventListener("click", () => shareNice(currentShareText()));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice(currentShareText()));
+  $("shareBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
 
   $("closeStatsBtn")?.addEventListener("click", hideModal);
   $("statsBackdrop")?.addEventListener("click", hideModal);
