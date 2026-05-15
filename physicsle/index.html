@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Physicsle — Daily Physics Phenomenon Quiz</title>
+  <meta name="description" content="Name the physics phenomenon from its description. 4 guesses with progressive hints. A free daily science quiz." />
+  <meta property="og:title" content="Physicsle — Daily Physics Phenomenon Quiz" />
+  <meta property="og:description" content="Can you name the physics phenomenon? New challenge every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/physicsle/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../shared.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">⚛️</div>
+        <div>
+          <h1>Physicsle</h1>
+          <div class="sub" id="modeLine">Name the physics phenomenon</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Physicsle?</h2>
+      <p>
+        Physicsle is a daily physics quiz where you read a description of a well-known
+        phenomenon and try to name it. You have four guesses, and after each wrong answer
+        you receive a progressive hint — the first letter, then the letter count. It is a
+        fun way to test and sharpen your knowledge of physics concepts from everyday life
+        and beyond.
+      </p>
+      <h2>Did You Know?</h2>
+      <p>
+        Physics phenomena surround us every day. The blue sky is caused by Rayleigh
+        scattering, mirages on hot roads come from refraction, and the satisfying crack of
+        a whip is actually a tiny sonic boom. From black holes to kitchen magnets, the
+        universe is full of surprising effects waiting to be named.
+      </p>
+    </section>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="triesPill">Guesses: 0/4</div>
+      </div>
+
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-label">What phenomenon is this?</div>
+        <div class="prompt-main" id="descriptionText" style="font-size:16px;font-weight:500;line-height:1.6">Loading…</div>
+        <div class="hint" id="hintLine"></div>
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="search-wrap">
+            <input id="guessInput" type="text" autocomplete="off" placeholder="Type a phenomenon name…" aria-label="Physics phenomenon guess" />
+            <div class="dropdown" id="dropdown" hidden></div>
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Result</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

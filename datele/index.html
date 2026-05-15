@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Datele — Daily Historical Date Quiz</title>
+  <meta name="description" content="Guess the month and year of a famous historical event. 6 guesses with directional feedback. A free daily history game." />
+  <meta property="og:title" content="Datele — Daily Historical Date Quiz" />
+  <meta property="og:description" content="When did it happen? Guess the month and year. New event every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/datele/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../shared.css" />
+  <style>
+    .date-inputs{display:flex;gap:10px;align-items:center;flex:1}
+    .date-inputs select,.date-inputs input{height:44px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);padding:0 12px;font-size:16px;outline:none}
+    .date-inputs select:focus,.date-inputs input:focus{border-color:#3b4d6b;box-shadow:0 0 0 3px rgba(123,220,255,.10)}
+    .date-inputs select{width:130px}
+    .date-inputs input{width:100px}
+    .feedback-month{font-size:12px;font-weight:700}
+    .feedback-year{font-size:12px;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">📅</div>
+        <div>
+          <h1>Datele</h1>
+          <div class="sub" id="modeLine">Guess the date of the event</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Datele?</h2>
+      <p>
+        Datele is a daily history quiz that gives you a famous event and challenges you to
+        guess the month and year it occurred. You have six guesses and receive directional
+        feedback after each one — "Earlier" or "Later" for the year, and whether your month
+        was correct or wrong. You win by getting the exact month and a year within one of
+        the actual date.
+      </p>
+      <h2>Test Your Timeline</h2>
+      <p>
+        History is full of dates that feel familiar until you have to pin them down. Was the
+        Moon landing in 1968 or 1969? Did the Titanic sink in April or March? Datele turns
+        those fuzzy memories into a daily challenge that sharpens your sense of when the
+        world's biggest moments actually happened.
+      </p>
+    </section>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="triesPill">Guesses: 0/6</div>
+      </div>
+
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-label">When did this happen?</div>
+        <div class="prompt-main" id="eventText">Loading…</div>
+        <div class="hint" id="hintLine"></div>
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="date-inputs">
+            <select id="monthInput" aria-label="Month">
+              <option value="">Month…</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+            <input id="yearInput" type="number" min="1" max="2030" placeholder="Year" aria-label="Year" />
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Result</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

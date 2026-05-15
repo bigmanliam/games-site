@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Reactionle — Daily Timer Challenge</title>
+  <meta name="description" content="Stop the timer at exactly 5.000 seconds. How precise are you? A free daily reaction time game." />
+  <meta property="og:title" content="Reactionle — Daily Timer Challenge" />
+  <meta property="og:description" content="Stop the timer at exactly 5.000 seconds. New challenge every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/reactionle/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../shared.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">⏱️</div>
+        <div>
+          <h1>Reactionle</h1>
+          <div class="sub">Stop the timer at exactly 5 seconds</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Reactionle?</h2>
+      <p>
+        Reactionle is a free daily timer precision game. A visible timer counts up from
+        zero and your goal is to stop it as close to exactly 5.000 seconds as possible.
+        You get one attempt per day — no do-overs, no practice runs. How steady are your
+        reflexes when it counts?
+      </p>
+      <h2>How to Play</h2>
+      <p>
+        Click the Start button to begin the timer. Watch the seconds tick upward and click
+        Stop when you believe you have hit 5.000 seconds. Your final time and the difference
+        from the target are shown immediately. Share your result to challenge friends and come
+        back tomorrow for a new attempt.
+      </p>
+    </section>
+
+    <!-- Ad unit -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="targetPill">Target: 5.000s</div>
+      </div>
+
+      <div class="timer-display">
+        <div class="time" id="timerText">0.000s</div>
+        <div class="result-text" id="resultText"></div>
+      </div>
+
+      <div class="play" style="text-align:center">
+        <button class="btn big" id="actionBtn">Start</button>
+      </div>
+
+      <!-- Stats Modal -->
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Result</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Ad unit: bottom -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

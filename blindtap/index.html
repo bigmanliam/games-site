@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Blindtap — Daily Blind Timer Challenge</title>
+  <meta name="description" content="No timer, no clues. Click Stop when you think 5 seconds have passed. A free daily internal clock game." />
+  <meta property="og:title" content="Blindtap — Daily Blind Timer Challenge" />
+  <meta property="og:description" content="Stop at exactly 5 seconds with no visible timer. New challenge every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/blindtap/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../shared.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🙈</div>
+        <div>
+          <h1>Blindtap</h1>
+          <div class="sub">Stop at 5 seconds — no timer visible</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Blindtap?</h2>
+      <p>
+        Blindtap is a free daily internal clock challenge. When you click Start, the screen
+        changes color — but there is no visible timer. You must rely entirely on your sense
+        of time to click Stop when you believe exactly 5.000 seconds have elapsed. One
+        attempt per day. How well do you know your own rhythm?
+      </p>
+      <h2>How to Play</h2>
+      <p>
+        Click Start and the background will shift to indicate the clock is running. Count
+        in your head, feel the beat, or just trust your gut — then click Stop when you think
+        five seconds are up. Your actual time and the difference from the target are revealed
+        instantly. Share your result and return tomorrow for another shot.
+      </p>
+    </section>
+
+    <!-- Ad unit -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card" id="gameCard">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="targetPill">Target: 5.000s</div>
+      </div>
+
+      <div class="timer-display">
+        <div class="time" id="timerText">—</div>
+        <div class="result-text" id="resultText"></div>
+      </div>
+
+      <div class="play" style="text-align:center">
+        <button class="btn big" id="actionBtn">Start</button>
+      </div>
+
+      <!-- Stats Modal -->
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Result</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Ad unit: bottom -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

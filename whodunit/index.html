@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Whodunit — Daily Famous Person Quiz</title>
+  <meta name="description" content="Can you identify the famous person from progressive clues? 6 clues, 6 guesses — from vague to obvious. A free daily trivia game." />
+  <meta property="og:title" content="Whodunit — Daily Famous Person Quiz" />
+  <meta property="og:description" content="Identify the famous person from progressive clues. New mystery every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/whodunit/" />
+  <link rel="stylesheet" href="../shared.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🔍</div>
+        <div>
+          <h1>Whodunit</h1>
+          <div class="sub" id="modeLine">Identify the famous person</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Whodunit?</h2>
+      <p>
+        Whodunit is a daily trivia game where you identify a famous person from
+        progressive clues. Each round begins with a vague hint and gets more
+        specific with every wrong guess, giving you up to six chances to crack
+        the mystery. The fewer clues you need, the better your score.
+      </p>
+      <h2>How to Play</h2>
+      <p>
+        Read the first clue and type your guess. If you are wrong, the next clue
+        is revealed — each one a little more obvious than the last. The sixth and
+        final clue practically gives the answer away, so true trivia experts aim
+        to solve it in one or two. Share your emoji scorecard with friends and
+        come back tomorrow for a new mystery person.
+      </p>
+    </section>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading...</div>
+        <div class="pill" id="triesPill">Clue: 1/6</div>
+      </div>
+
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-label">Clue</div>
+        <div class="prompt-main" id="clueText">Loading...</div>
+        <div class="hint" id="hintLine"></div>
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="search-wrap">
+            <input id="guessInput" type="text" autocomplete="off" placeholder="Type a famous person's name..." aria-label="Famous person guess" />
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Results</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">&#10005;</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">&mdash;</div>
+          <div class="smallResult" id="endBody">&mdash;</div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> &middot;
+        <a href="https://popdle.com">Popdle</a> &middot;
+        <a href="/flagle/">Flagle</a> &middot;
+        <a href="/distantle/">Distantle</a> &middot;
+        <a href="/capitdle/">Capitdle</a> &middot;
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+      <div class="tiny">A daily trivia game</div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

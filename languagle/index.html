@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Languagle — Daily Language Identification Quiz</title>
+  <meta name="description" content="Identify the language from a text snippet. 4 guesses with progressive hints. A free daily linguistics game." />
+  <meta property="og:title" content="Languagle — Daily Language Identification Quiz" />
+  <meta property="og:description" content="What language is this? Identify the language from a text snippet every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/languagle/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../shared.css" />
+  <style>
+    .snippet-text{font-size:22px;font-weight:600;line-height:1.5;letter-spacing:.5px;word-break:break-word}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🌍</div>
+        <div>
+          <h1>Languagle</h1>
+          <div class="sub" id="modeLine">Identify the language</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Languagle?</h2>
+      <p>
+        Languagle is a daily language identification game. You are shown a text snippet
+        in a mystery language and must figure out which language it is. You have four
+        guesses, and after each wrong answer you receive a hint — the region, a
+        characteristic feature, or the language family. How many of the world's languages
+        can you recognize on sight?
+      </p>
+      <h2>Over 7,000 Languages</h2>
+      <p>
+        The world has thousands of living languages, each with its own script, grammar, and
+        rhythm. Some are immediately recognizable by their unique characters, while others
+        look deceptively similar to their neighbors. Languagle draws from dozens of
+        languages across every continent to test your linguistic intuition.
+      </p>
+    </section>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="triesPill">Guesses: 0/4</div>
+      </div>
+
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-label">What language is this?</div>
+        <div class="snippet-text" id="snippetText">Loading…</div>
+        <div class="hint" id="hintLine"></div>
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="search-wrap">
+            <input id="guessInput" type="text" autocomplete="off" placeholder="Type a language name…" aria-label="Language guess" />
+            <div class="dropdown" id="dropdown" hidden></div>
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Result</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
