@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Capitdle — Daily Capital City Quiz</title>
+  <meta name="description" content="Can you name the capital? Given a country, guess its capital city. 6 tries, hints after each wrong answer. Free daily geography game." />
+  <meta property="og:title" content="Capitdle — Daily Capital City Quiz" />
+  <meta property="og:description" content="Name the capital city — new country every day. A free daily geography game." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/capitdle/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🏛️</div>
+        <div>
+          <h1>Capitdle</h1>
+          <div class="sub" id="modeLine">Name the capital city</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Capitdle?</h2>
+      <p>
+        Capitdle is a daily geography quiz that gives you a country and asks you to name its
+        capital city. You have six guesses, and after each wrong answer you get a hint — the
+        first letter, the number of letters, or the continent. It sounds easy until you
+        realize that many capitals are not the largest or most famous city in their country.
+      </p>
+      <h2>Did You Know?</h2>
+      <p>
+        Some of the trickiest capitals catch even geography enthusiasts off guard. The capital
+        of Australia is Canberra (not Sydney), the capital of Brazil is Brasília (not São
+        Paulo or Rio), Turkey's capital is Ankara (not Istanbul), and Myanmar's capital is
+        Naypyidaw (not Yangon). Many countries moved their capitals for political, geographic,
+        or strategic reasons — learning the stories behind these choices is one of the most
+        interesting parts of the game.
+      </p>
+    </section>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="triesPill">Guesses: 0/6</div>
+      </div>
+
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-label">What is the capital of</div>
+        <div class="prompt-country" id="countryName">Loading…</div>
+        <div class="hint" id="hintLine"></div>
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="search-wrap">
+            <input id="guessInput" type="text" autocomplete="off" placeholder="Type a city name…" aria-label="Capital city guess" />
+            <div class="dropdown" id="dropdown" hidden></div>
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Stats</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/flagle/">Flagle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+      <div class="tiny">Data: Wikidata (CC0)</div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

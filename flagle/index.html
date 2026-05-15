@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Flagle — Daily Flag Guessing Game</title>
+  <meta name="description" content="Guess the country from its flag. Tiles reveal progressively — how few clues do you need? A free daily geography game." />
+  <meta property="og:title" content="Flagle — Daily Flag Guessing Game" />
+  <meta property="og:description" content="Guess the country from its flag. Tiles reveal progressively — new puzzle every day." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://daily-le.com/flagle/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025616133591971"
+     crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🏁</div>
+        <div>
+          <h1>Flagle</h1>
+          <div class="sub" id="modeLine">Guess the country from its flag</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link" href="https://daily-le.com">All Games</a>
+        <button class="btn ghost" id="shareTopBtn" disabled>Share</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <h2>What is Flagle?</h2>
+      <p>
+        Flagle is a free daily flag guessing game. Each day a country's flag is hidden behind a
+        grid of tiles. One tile is revealed at the start, and after each incorrect guess another
+        tile flips over, giving you more of the flag to work with. You have six attempts to
+        identify the country. The fewer guesses you need, the better your score.
+      </p>
+      <h2>How to Play</h2>
+      <p>
+        Look at the revealed portion of the flag and type a country name into the search box.
+        Select your answer from the dropdown. If you are wrong, an additional tile flips to
+        reveal more of the flag. Keep narrowing it down until you identify the country or run
+        out of guesses. After the game, share your emoji board to challenge friends.
+      </p>
+      <h2>Tips for Recognizing Flags</h2>
+      <p>
+        Color patterns are your best clue. Pan-African colors (green, yellow, red) appear across
+        many African nations. The Nordic cross identifies Scandinavian countries. A Union Jack
+        canton often signals a current or former British territory. Crescents and stars appear
+        frequently in flags of Muslim-majority countries. Coats of arms or emblems in the center
+        stripe can distinguish countries that otherwise share color schemes — like Romania and
+        Chad, whose flags are nearly identical tricolors.
+      </p>
+    </section>
+
+    <!-- Ad unit -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="card">
+      <div class="status">
+        <div class="pill" id="dayPill">Loading…</div>
+        <div class="pill" id="triesPill">Guesses: 0/6</div>
+      </div>
+
+      <div class="flag-grid" id="flagGrid">
+        <!-- 6 tiles (2x3) rendered by JS -->
+      </div>
+
+      <div class="play">
+        <form id="guessForm" class="guess">
+          <div class="search-wrap">
+            <input
+              id="guessInput"
+              type="text"
+              autocomplete="off"
+              placeholder="Type a country name…"
+              aria-label="Country guess"
+            />
+            <div class="dropdown" id="dropdown" hidden></div>
+          </div>
+          <button class="btn" id="guessBtn" type="submit">Guess</button>
+        </form>
+
+        <div class="error" id="errorLine" role="alert"></div>
+
+        <div class="history" id="history"></div>
+      </div>
+
+      <!-- Stats Modal -->
+      <div class="modal-backdrop" id="statsBackdrop" hidden></div>
+      <div class="modal" id="statsModal" hidden role="dialog" aria-modal="true">
+        <div class="modalHead">
+          <div class="modalTitle">Stats</div>
+          <button class="iconBtn" id="closeStatsBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <div class="bigResult" id="endTitle">—</div>
+          <div class="smallResult" id="endBody">—</div>
+          <div class="flag-reveal" id="flagReveal"></div>
+          <div class="scoreRow">
+            <div class="scoreLabel">Your board</div>
+            <div class="scoreGrid" id="emojiGrid"></div>
+          </div>
+          <div class="actionsRow">
+            <button class="btn" id="shareBtn" disabled>Share</button>
+            <a class="btn ghost cta" href="https://popdle.com" target="_blank" rel="noopener">Play Popdle</a>
+            <a class="btn ghost cta" href="https://daily-le.com" rel="noopener">More Games</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Ad unit: bottom -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block;max-height:250px"
+           data-ad-client="ca-pub-5025616133591971"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="false"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <a href="https://daily-le.com">Daily-le</a> ·
+        <a href="https://popdle.com">Popdle</a> ·
+        <a href="/distantle/">Distantle</a> ·
+        <a href="/capitdle/">Capitdle</a> ·
+        <a href="https://playquotedle.com">Quotedle</a>
+      </div>
+      <div class="tiny">Data: Wikidata (CC0)</div>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
