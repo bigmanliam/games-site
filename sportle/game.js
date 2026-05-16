@@ -208,7 +208,7 @@ function normalize(str) {
 (function main() {
   const today = todayLocalISO();
   const puzzleNo = gameNumberFromDate(today);
-  setText("dayPill", "#" + puzzleNo + " — " + today);
+  setText("dayPill", "#" + puzzleNo + " · " + today);
 
   const dailySports = pickMultipleFromBag(SPORTS, "sportle", today, ROUNDS);
 
@@ -236,12 +236,18 @@ function normalize(str) {
     $("guessInput").focus();
   }
 
+  // Share & modal close (bound before early-return so they work on revisit)
+  if ($("shareBtn")) $("shareBtn").addEventListener("click", function() { shareNice("Sportle", buildShareText(), "https://daily-le.com/sportle/"); });
+  if ($("shareTopBtn")) $("shareTopBtn").addEventListener("click", function() { shareNice("Sportle", buildShareText(), "https://daily-le.com/sportle/"); });
+  if ($("closeStatsBtn")) $("closeStatsBtn").addEventListener("click", hideModal);
+  if ($("statsBackdrop")) $("statsBackdrop").addEventListener("click", hideModal);
+
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
     setText("descText", "You have already played today.");
-    setText("endTitle", "Already played today ✅");
+    setText("endTitle", "Already played today");
     setText("endBody", "Come back tomorrow for new sports.");
     $("shareBtn").disabled = false;
     $("shareTopBtn").disabled = false;
@@ -257,7 +263,7 @@ function normalize(str) {
     localStorage.setItem(DAILY_DONE_KEY, today);
 
     const allCorrect = correctCount === ROUNDS;
-    setText("endTitle", allCorrect ? "Perfect score! ✅" : "Finished! " + correctCount + "/" + ROUNDS);
+    setText("endTitle", allCorrect ? "Perfect score!" : "Finished! " + correctCount + "/" + ROUNDS);
     setText("endBody", "Sports today: " + dailySports.map(function(s) { return s.name; }).join(", "));
 
     var grid = $("emojiGrid");
@@ -327,10 +333,4 @@ function normalize(str) {
     }, 800);
   });
 
-  // Share
-  if ($("shareBtn")) $("shareBtn").addEventListener("click", function() { shareNice("Sportle", buildShareText(), "https://daily-le.com/sportle/"); });
-  if ($("shareTopBtn")) $("shareTopBtn").addEventListener("click", function() { shareNice("Sportle", buildShareText(), "https://daily-le.com/sportle/"); });
-
-  if ($("closeStatsBtn")) $("closeStatsBtn").addEventListener("click", hideModal);
-  if ($("statsBackdrop")) $("statsBackdrop").addEventListener("click", hideModal);
 })();

@@ -363,7 +363,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
 (function main() {
   const today = todayLocalISO();
   const gameNum = gameNumberFromDate(today);
-  setText("dayPill", `#${gameNum} — ${today}`);
+  setText("dayPill", `#${gameNum} · ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
   const chosen = pickFromBag(CITIES, "statele", today);
@@ -374,6 +374,15 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   let guesses = 0;
   let solved = false;
   const history = [];
+
+  /* Share & modal close (bound before early-return so they work on revisit) */
+  function currentShareText() {
+    return buildShareText(gameNum, history, solved, guesses);
+  }
+  $("shareBtn")?.addEventListener("click", () => shareNice("Statele", currentShareText(), "https://daily-le.com/statele/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Statele", currentShareText(), "https://daily-le.com/statele/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
 
   /* Already played */
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
@@ -451,22 +460,28 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
 
     if (correct) { endGame(true); return; }
 
-    /* Show hint */
-    const hint = getHint(chosen, guesses);
-    if (hint) setText("hintLine", "Hint: " + hint);
-
     if (guesses >= MAX_GUESSES) { endGame(false); return; }
 
     $("guessInput").focus();
   });
 
-  /* Share */
-  function currentShareText() {
-    return buildShareText(gameNum, history, solved, guesses);
-  }
-  $("shareBtn")?.addEventListener("click", () => shareNice("Statele", currentShareText(), "https://daily-le.com/statele/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Statele", currentShareText(), "https://daily-le.com/statele/"));
+  /* Reveal Hint button — all 3 hints available from the start, revealed one at a time */
+  let hintsRevealed = 0;
+  const hintBtn = $("hintBtn");
 
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
+  hintBtn.addEventListener("click", () => {
+    if (solved || hintsRevealed >= 3) return;
+    hintsRevealed++;
+    const hint = getHint(chosen, hintsRevealed);
+    const current = $("hintLine").textContent;
+    if (current) {
+      setText("hintLine", current + " | " + hint);
+    } else {
+      setText("hintLine", hint);
+    }
+    if (hintsRevealed >= 3) {
+      hintBtn.disabled = true;
+    }
+  });
+
 })();

@@ -140,7 +140,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
 (function main() {
   const today = todayLocalISO();
   const gameNum = gameNumberFromDate(today);
-  setText("dayPill", `#${gameNum} — ${today}`);
+  setText("dayPill", `#${gameNum} · ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
   const chosen = pickFromBag(ELEMENTS, "elemently", today);
@@ -150,6 +150,15 @@ function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
   let guesses = 0;
   let solved = false;
   const history = [];
+
+  /* Share & modal close (bound before early-return so they work on revisit) */
+  function currentShareText() {
+    return buildShareText(gameNum, history, solved, guesses, chosen.number);
+  }
+  $("shareBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
 
   /* Already played */
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
@@ -215,8 +224,8 @@ function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
     /* Hint line */
     if (!correct) {
       setText("hintLine", val < chosen.number
-        ? `${val} is too low — go higher`
-        : `${val} is too high — go lower`);
+        ? `${val} is too low, go higher`
+        : `${val} is too high, go lower`);
     }
 
     /* History row */
@@ -246,13 +255,4 @@ function buildShareText(puzzleNo, history, solved, guessesUsed, target) {
     $("guessInput").focus();
   });
 
-  /* Share */
-  function currentShareText() {
-    return buildShareText(gameNum, history, solved, guesses, chosen.number);
-  }
-  $("shareBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Elemently", currentShareText(), "https://daily-le.com/elemently/"));
-
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

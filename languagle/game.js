@@ -217,7 +217,7 @@ function setupSearch(allNames) {
 (function main() {
   const today = todayLocalISO();
   const puzzleNo = gameNumberFromDate(today);
-  setText("dayPill", `#${puzzleNo} — ${today}`);
+  setText("dayPill", `#${puzzleNo} · ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
   const chosen = pickFromBag(LANGUAGES, "languagle", today);
@@ -230,10 +230,47 @@ function setupSearch(allNames) {
   let solved = false;
   const history = [];
 
+  // Hint button logic
+  let hintsRevealed = 0;
+  const MAX_HINTS = 3;
+
+  function updateHintBtn() {
+    const btn = $("hintBtn");
+    if (!btn) return;
+    const remaining = MAX_HINTS - hintsRevealed;
+    if (remaining <= 0) {
+      btn.disabled = true;
+      btn.textContent = "No hints left";
+    } else {
+      btn.textContent = `Reveal Hint (${remaining} left)`;
+    }
+  }
+
+  $("hintBtn")?.addEventListener("click", () => {
+    if (hintsRevealed >= MAX_HINTS) return;
+    hintsRevealed++;
+    let hints = [];
+    for (let i = 1; i <= hintsRevealed; i++) {
+      const h = getHint(chosen, i);
+      if (h) hints.push(h);
+    }
+    setText("hintLine", hints.join(" | "));
+    updateHintBtn();
+  });
+
+  updateHintBtn();
+
+  // Share & modal close (bound before early-return so they work on revisit)
+  $("shareBtn")?.addEventListener("click", () => shareNice("Languagle", buildShareText(), "https://daily-le.com/languagle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Languagle", buildShareText(), "https://daily-le.com/languagle/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
+
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
+    if ($("hintBtn")) $("hintBtn").disabled = true;
     setText("endTitle", "Already played today");
     setText("endBody", `The answer was: ${chosen.language}`);
     $("shareBtn").disabled = false;
@@ -246,9 +283,10 @@ function setupSearch(allNames) {
     solved = win;
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
+    if ($("hintBtn")) $("hintBtn").disabled = true;
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! \u{1F30D}" : "Not this time ❌");
+    setText("endTitle", win ? "You got it!" : "Not this time");
     setText("endBody", `The answer was: ${chosen.language}`);
 
     const grid = $("emojiGrid");
@@ -305,18 +343,9 @@ function setupSearch(allNames) {
 
     if (correct) { endGame(true); return; }
 
-    const hint = getHint(chosen, guesses);
-    if (hint) setText("hintLine", "Hint: " + hint);
-
     if (guesses >= MAX_GUESSES) { endGame(false); return; }
 
     $("guessInput").focus();
   });
 
-  // Share
-  $("shareBtn")?.addEventListener("click", () => shareNice("Languagle", buildShareText(), "https://daily-le.com/languagle/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Languagle", buildShareText(), "https://daily-le.com/languagle/"));
-
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

@@ -204,12 +204,22 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   let solved = false;
   const history = [];
 
+  // Share & modal close (bound before early-return so they work on revisit)
+  function currentShareText() {
+    const no = gameNumberFromDate(today);
+    return buildShareText(no, history, solved, guesses);
+  }
+  $("shareBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
+
   // Already played?
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     revealAll();
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
-    setText("endTitle", "Already played today ✅");
+    setText("endTitle", "Already played today");
     setText("endBody", `The flag was ${chosen.name}`);
     const reveal = $("flagReveal");
     if (reveal) reveal.innerHTML = `<img src="${flagURL(chosen.iso2)}" alt="${chosen.name} flag">`;
@@ -227,7 +237,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
 
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! ✅" : "Not this time ❌");
+    setText("endTitle", win ? "You got it!" : "Not this time");
     setText("endBody", `The flag was ${chosen.name}`);
     const reveal = $("flagReveal");
     if (reveal) reveal.innerHTML = `<img src="${flagURL(chosen.iso2)}" alt="${chosen.name} flag">`;
@@ -292,15 +302,4 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     $("guessInput").focus();
   });
 
-  // Share
-  function currentShareText() {
-    const no = gameNumberFromDate(today);
-    return buildShareText(no, history, solved, guesses);
-  }
-  $("shareBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Flagle", currentShareText(), "https://daily-le.com/flagle/"));
-
-  // Modal close
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

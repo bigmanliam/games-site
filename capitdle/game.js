@@ -163,11 +163,51 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   let solved = false;
   const history = [];
 
+  // Hint button logic
+  let hintsRevealed = 0;
+  const MAX_HINTS = 5;
+
+  function updateHintBtn() {
+    const btn = $("hintBtn");
+    if (!btn) return;
+    const remaining = MAX_HINTS - hintsRevealed;
+    if (remaining <= 0) {
+      btn.disabled = true;
+      btn.textContent = "No hints left";
+    } else {
+      btn.textContent = `Reveal Hint (${remaining} left)`;
+    }
+  }
+
+  $("hintBtn")?.addEventListener("click", () => {
+    if (hintsRevealed >= MAX_HINTS) return;
+    hintsRevealed++;
+    let hints = [];
+    for (let i = 1; i <= hintsRevealed; i++) {
+      const h = getHint(chosen.capital, i);
+      if (h) hints.push(h);
+    }
+    setText("hintLine", hints.join(" | "));
+    updateHintBtn();
+  });
+
+  updateHintBtn();
+
+  // Share & modal close (bound before early-return so they work on revisit)
+  function currentShareText() {
+    return buildShareText(gameNumberFromDate(today), history, solved, guesses);
+  }
+  $("shareBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
+
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
-    setText("endTitle", "Already played today ✅");
+    if ($("hintBtn")) $("hintBtn").disabled = true;
+    setText("endTitle", "Already played today");
     setText("endBody", `The capital of ${chosen.country} is ${chosen.capital}.`);
     $("shareBtn").disabled = false;
     $("shareTopBtn").disabled = false;
@@ -179,9 +219,10 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     solved = win;
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
+    if ($("hintBtn")) $("hintBtn").disabled = true;
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! ✅" : "Not this time ❌");
+    setText("endTitle", win ? "You got it!" : "Not this time");
     setText("endBody", `The capital of ${chosen.country} is ${chosen.capital}.`);
 
     const grid = $("emojiGrid");
@@ -232,22 +273,9 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
 
     if (correct) { endGame(true); return; }
 
-    // Show hint
-    const hint = getHint(chosen.capital, guesses);
-    if (hint) setText("hintLine", "Hint: " + hint);
-
     if (guesses >= MAX_GUESSES) { endGame(false); return; }
 
     $("guessInput").focus();
   });
 
-  // Share
-  function currentShareText() {
-    return buildShareText(gameNumberFromDate(today), history, solved, guesses);
-  }
-  $("shareBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Capitdle", currentShareText(), "https://daily-le.com/capitdle/"));
-
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

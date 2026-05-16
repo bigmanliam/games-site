@@ -169,13 +169,81 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   return `Whodunit #${puzzleNo} 🔍\n${emojis}\n${score}\nhttps://daily-le.com/whodunit/`;
 }
 
+/* ---- Search dropdown ---- */
+function setupSearch() {
+  const input = $("guessInput");
+  const dropdown = $("dropdown");
+  let selected = null;
+  let filtered = [];
+  let activeIdx = -1;
+
+  const ALL_NAMES = PEOPLE.map(p => p.name);
+
+  function render(list) {
+    dropdown.innerHTML = "";
+    filtered = list;
+    activeIdx = -1;
+    if (!list.length) { dropdown.hidden = true; return; }
+    dropdown.hidden = false;
+    list.slice(0, 8).forEach((name) => {
+      const div = document.createElement("div");
+      div.className = "dropdown-item";
+      div.textContent = name;
+      div.addEventListener("mousedown", (e) => { e.preventDefault(); pick(name); });
+      dropdown.appendChild(div);
+    });
+  }
+
+  function pick(name) {
+    selected = name;
+    input.value = name;
+    dropdown.hidden = true;
+  }
+
+  input.addEventListener("input", () => {
+    selected = null;
+    const q = input.value.trim().toLowerCase();
+    if (q.length < 1) { dropdown.hidden = true; return; }
+    const matches = ALL_NAMES.filter(s => s.toLowerCase().includes(q));
+    render(matches);
+  });
+
+  input.addEventListener("keydown", (e) => {
+    const items = dropdown.querySelectorAll(".dropdown-item");
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      activeIdx = Math.min(activeIdx + 1, items.length - 1);
+      items.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      activeIdx = Math.max(activeIdx - 1, 0);
+      items.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+    } else if (e.key === "Enter" && activeIdx >= 0 && filtered[activeIdx]) {
+      e.preventDefault();
+      pick(filtered[activeIdx]);
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => { dropdown.hidden = true; }, 150);
+  });
+
+  return () => {
+    const val = selected || input.value.trim();
+    selected = null;
+    input.value = "";
+    return val;
+  };
+}
+
 /* ---- Main ---- */
 (function main() {
   const today = todayLocalISO();
   const puzzleNo = gameNumberFromDate(today);
-  setText("dayPill", `#${puzzleNo} — ${today}`);
+  setText("dayPill", `#${puzzleNo} · ${today}`);
 
   const chosen = pickFromBag(PEOPLE, "whodunit", today);
+  const getGuess = setupSearch();
 
   let guesses = 0;
   let solved = false;
@@ -186,12 +254,21 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     setText("triesPill", `Clue: ${n + 1}/${MAX_GUESSES}`);
   }
 
+  // Share & modal close (bound before early-return so they work on revisit)
+  function currentShareText() {
+    return buildShareText(puzzleNo, history, solved, guesses);
+  }
+  if ($("shareBtn")) $("shareBtn").addEventListener("click", function() { shareNice("Whodunit", currentShareText(), "https://daily-le.com/whodunit/"); });
+  if ($("shareTopBtn")) $("shareTopBtn").addEventListener("click", function() { shareNice("Whodunit", currentShareText(), "https://daily-le.com/whodunit/"); });
+  if ($("closeStatsBtn")) $("closeStatsBtn").addEventListener("click", hideModal);
+  if ($("statsBackdrop")) $("statsBackdrop").addEventListener("click", hideModal);
+
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     $("guessInput").disabled = true;
     $("guessBtn").disabled = true;
     showClue(MAX_GUESSES - 1);
-    setText("endTitle", "Already played today ✅");
+    setText("endTitle", "Already played today");
     setText("endBody", `The answer was ${chosen.name}.`);
     $("shareBtn").disabled = false;
     $("shareTopBtn").disabled = false;
@@ -207,7 +284,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     $("guessBtn").disabled = true;
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! ✅" : "Not this time ❌");
+    setText("endTitle", win ? "You got it!" : "Not this time");
     setText("endBody", `The answer was ${chosen.name}.`);
 
     const grid = $("emojiGrid");
@@ -233,9 +310,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     setText("errorLine", "");
     if (solved) return;
 
-    const input = $("guessInput");
-    const guess = input.value.trim();
-    input.value = "";
+    const guess = getGuess();
 
     if (!guess) {
       setText("errorLine", "Type a name to guess.");
@@ -265,13 +340,4 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     $("guessInput").focus();
   });
 
-  // Share
-  function currentShareText() {
-    return buildShareText(puzzleNo, history, solved, guesses);
-  }
-  if ($("shareBtn")) $("shareBtn").addEventListener("click", function() { shareNice("Whodunit", currentShareText(), "https://daily-le.com/whodunit/"); });
-  if ($("shareTopBtn")) $("shareTopBtn").addEventListener("click", function() { shareNice("Whodunit", currentShareText(), "https://daily-le.com/whodunit/"); });
-
-  if ($("closeStatsBtn")) $("closeStatsBtn").addEventListener("click", hideModal);
-  if ($("statsBackdrop")) $("statsBackdrop").addEventListener("click", hideModal);
 })();

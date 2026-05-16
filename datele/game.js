@@ -280,7 +280,7 @@ const EVENTS = [
 (function main() {
   const today = todayLocalISO();
   const puzzleNo = gameNumberFromDate(today);
-  setText("dayPill", `#${puzzleNo} — ${today}`);
+  setText("dayPill", `#${puzzleNo} · ${today}`);
   setText("triesPill", `Guesses: 0/${MAX_GUESSES}`);
 
   const chosen = pickFromBag(EVENTS, "datele", today);
@@ -289,6 +289,12 @@ const EVENTS = [
   let guesses = 0;
   let solved = false;
   const history = [];
+
+  // Share & modal close (bound before early-return so they work on revisit)
+  $("shareBtn")?.addEventListener("click", () => shareNice("Datele", buildShareText(), "https://daily-le.com/datele/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Datele", buildShareText(), "https://daily-le.com/datele/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
 
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
@@ -310,7 +316,7 @@ const EVENTS = [
     $("guessBtn").disabled = true;
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! \u{1F4C5}" : "Not this time ❌");
+    setText("endTitle", win ? "You got it!" : "Not this time");
     setText("endBody", `${chosen.event}: ${MONTHS[chosen.month]} ${chosen.year}`);
 
     const grid = $("emojiGrid");
@@ -395,10 +401,4 @@ const EVENTS = [
     $("monthInput").focus();
   });
 
-  // Share
-  $("shareBtn")?.addEventListener("click", () => shareNice("Datele", buildShareText(), "https://daily-le.com/datele/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Datele", buildShareText(), "https://daily-le.com/datele/"));
-
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

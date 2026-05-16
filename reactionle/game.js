@@ -11,7 +11,7 @@ function buildShareText(puzzleNo, finalTime, diffMs) {
 (function main() {
   const today = todayLocalISO();
   const puzzleNo = gameNumberFromDate(today);
-  setText("dayPill", `#${puzzleNo} — ${today}`);
+  setText("dayPill", `#${puzzleNo} · ${today}`);
 
   const btn = $("actionBtn");
   const timerText = $("timerText");
@@ -55,7 +55,7 @@ function buildShareText(puzzleNo, finalTime, diffMs) {
     else verdict = "Keep practicing ⏱️";
 
     setText("endTitle", verdict);
-    setText("endBody", `You stopped at ${finalTime.toFixed(3)}s — off by ${diffMs}ms`);
+    setText("endBody", `You stopped at ${finalTime.toFixed(3)}s, off by ${diffMs}ms`);
 
     $("shareBtn").disabled = false;
     $("shareTopBtn").disabled = false;
@@ -65,6 +65,10 @@ function buildShareText(puzzleNo, finalTime, diffMs) {
     $("shareBtn").onclick = () => shareNice("Reactionle", shareText, "https://daily-le.com/reactionle/");
     $("shareTopBtn").onclick = () => shareNice("Reactionle", shareText, "https://daily-le.com/reactionle/");
   }
+
+  // Modal close (bound before early-return so they work on revisit)
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
 
   // Already played?
   try {
@@ -76,8 +80,8 @@ function buildShareText(puzzleNo, finalTime, diffMs) {
       btn.disabled = true;
       state = "done";
 
-      setText("endTitle", "Already played today ✅");
-      setText("endBody", `You stopped at ${saved.time.toFixed(3)}s — off by ${saved.diffMs}ms`);
+      setText("endTitle", "Already played today");
+      setText("endBody", `You stopped at ${saved.time.toFixed(3)}s, off by ${saved.diffMs}ms`);
       $("shareBtn").disabled = false;
       $("shareTopBtn").disabled = false;
       showModal();
@@ -101,7 +105,4 @@ function buildShareText(puzzleNo, finalTime, diffMs) {
     }
   });
 
-  // Modal close
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();

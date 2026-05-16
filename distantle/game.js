@@ -169,11 +169,20 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
   const guessInput = $("guessInput");
   const guessForm = $("guessForm");
 
+  // Share & modal close (bound before early-return so they work on revisit)
+  function currentShareText() {
+    return buildShareText(gameNumberFromDate(today), history, solved, guesses);
+  }
+  $("shareBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
+  $("shareTopBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
+  $("closeStatsBtn")?.addEventListener("click", hideModal);
+  $("statsBackdrop")?.addEventListener("click", hideModal);
+
   // Already played
   if (localStorage.getItem(DAILY_DONE_KEY) === today) {
     guessInput.disabled = true;
     $("guessBtn").disabled = true;
-    setText("endTitle", "Already played today ✅");
+    setText("endTitle", "Already played today");
     setText("endBody", `${pair.a.name} ↔ ${pair.b.name}: ${formatKm(actualDist)}`);
     $("shareBtn").disabled = false;
     $("shareTopBtn").disabled = false;
@@ -187,7 +196,7 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     $("guessBtn").disabled = true;
     localStorage.setItem(DAILY_DONE_KEY, today);
 
-    setText("endTitle", win ? "You got it! ✅" : "Out of guesses ❌");
+    setText("endTitle", win ? "You got it!" : "Out of guesses");
     setText("endBody", `${pair.a.name} ↔ ${pair.b.name}: ${formatKm(actualDist)}`);
 
     // Emoji grid
@@ -272,13 +281,4 @@ function buildShareText(puzzleNo, history, solved, guessesUsed) {
     guessInput.focus();
   });
 
-  // Share
-  function currentShareText() {
-    return buildShareText(gameNumberFromDate(today), history, solved, guesses);
-  }
-  $("shareBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
-  $("shareTopBtn")?.addEventListener("click", () => shareNice("Distantle", currentShareText(), "https://daily-le.com/distantle/"));
-
-  $("closeStatsBtn")?.addEventListener("click", hideModal);
-  $("statsBackdrop")?.addEventListener("click", hideModal);
 })();
